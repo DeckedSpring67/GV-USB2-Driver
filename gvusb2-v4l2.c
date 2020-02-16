@@ -142,12 +142,17 @@ static int gvusb2_vb2_start_streaming(struct vb2_queue *vb2q,
 	dev->sequence = 0;
 
 	/* set cropping */
-	//reg_07 = i2c_smbus_read_byte_data(&dev->i2c_client, 0x07);
-	//i2c_smbus_write_byte_data(&dev->i2c_client, 0x07, reg_07 & 0x0f);
-	//i2c_smbus_write_byte_data(&dev->i2c_client, 0x08, 0x13);
-	//i2c_smbus_write_byte_data(&dev->i2c_client, 0x09, 0xf4);
-	//i2c_smbus_write_byte_data(&dev->i2c_client, 0x0a, 0x12);
-	//i2c_smbus_write_byte_data(&dev->i2c_client, 0x0b, 0xd2);
+	reg_07 = i2c_smbus_read_byte_data(&dev->i2c_client, 0x07);
+	i2c_smbus_write_byte_data(&dev->i2c_client, 0x07, reg_07 & 0x0f);
+	i2c_smbus_write_byte_data(&dev->i2c_client, 0x08, 0x13);
+	i2c_smbus_write_byte_data(&dev->i2c_client, 0x09, 0xf4);
+	i2c_smbus_write_byte_data(&dev->i2c_client, 0x0a, 0x12);
+	i2c_smbus_write_byte_data(&dev->i2c_client, 0x0b, 0xd2);
+	i2c_smbus_write_byte_data(&dev->i2c_client, 0x0b, 0xd2);
+	/* set scaling */
+	i2c_smbus_write_byte_data(&dev->i2c_client, 0x0d, 0x00);
+	i2c_smbus_write_byte_data(&dev->i2c_client, 0x0f, 0x00);
+	i2c_smbus_write_byte_data(&dev->i2c_client, 0x0e, 0x22);
 
 	/* start tw9910 */
 	v4l2_device_call_all(&dev->v4l2_dev, 0, video, s_stream, 1);
