@@ -34,6 +34,9 @@ struct i2c_regval {
 
 void get_resolution(struct gvusb2_vid *dev, int *width, int *height)
 {
+
+	reg1c = i2c_smbus_read_byte_data(&dev->i2c_client, 0x1c);
+	printk("Reading: 0x%08x\n",reg1c);
 	switch (dev->standard) {
 	default:
 	case V4L2_STD_NTSC_M:
@@ -628,7 +631,7 @@ int gvusb2_video_register(struct gvusb2_vid *dev)
 	/* set standard for device */
 	uint reg1c;
 	reg1c = i2c_smbus_read_byte_data(&dev->i2c_client, 0x1c);
-	printk("0x%08x\n",reg1c);
+	printk("Initialization: 0x%08x\n",reg1c);
 	dev->standard = V4L2_STD_NTSC_M;
 
 	/* set standard for sub-devices */
