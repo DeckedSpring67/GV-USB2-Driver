@@ -34,7 +34,10 @@ struct i2c_regval {
 
 void get_resolution(struct gvusb2_vid *dev, int *width, int *height)
 {
-	printk("%s",dev->standard);
+	FILE *fp;
+	fp = fopen("/tmp/gvusb.log", "a");
+	fprintf(fp,"%s",dev->standard);
+	fclose(fp);
 	switch (dev->standard) {
 	default:
 	case V4L2_STD_NTSC_M:
