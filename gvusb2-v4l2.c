@@ -34,6 +34,13 @@ struct i2c_regval {
 
 void get_resolution(struct gvusb2_vid *dev, int *width, int *height)
 {
+	u32 reg_07;
+	reg_07 = i2c_smbus_read_byte_data(&dev->i2c_client, 0x07);
+	printk("------------\n");
+	printk("Register 07: 0x%08x\n",reg_07);
+	reg_07 = i2c_smbus_read_byte_data(&dev->i2c_client, 0x0b);
+	printk("Register 0b: 0x%08x\n",reg_07);
+
 	switch (dev->standard) {
 	default:
 	case V4L2_STD_NTSC_M:
