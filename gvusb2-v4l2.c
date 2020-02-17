@@ -36,9 +36,9 @@ void get_resolution(struct gvusb2_vid *dev, int *width, int *height)
 {
 	u8 reg1c;
 	printk("----------\n");
-	reg1c = gvusb2_read_reg(&dev->gv, 0x07, &reg1c);
+	gvusb2_read_reg(&dev->gv, 0x07, &reg1c);
 	printk("Reading 0x07: 0x%08x\n",reg1c);
-	reg1c = gvusb2_read_reg(&dev->gv, 0x0b, &reg1c);
+	gvusb2_read_reg(&dev->gv, 0x0b, &reg1c);
 	printk("Reading 0x0b: 0x%08x\n",reg1c);
 	switch (dev->standard) {
 	default:
