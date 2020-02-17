@@ -34,12 +34,6 @@ struct i2c_regval {
 
 void get_resolution(struct gvusb2_vid *dev, int *width, int *height)
 {
-	u8 reg1c;
-	printk("----------\n");
-	gvusb2_read_reg(&dev->gv, 0x07, &reg1c);
-	printk("Reading 0x07: 0x%08x\n",reg1c);
-	gvusb2_read_reg(&dev->gv, 0x0b, &reg1c);
-	printk("Reading 0x0b: 0x%08x\n",reg1c);
 	switch (dev->standard) {
 	default:
 	case V4L2_STD_NTSC_M:
@@ -150,16 +144,10 @@ static int gvusb2_vb2_start_streaming(struct vb2_queue *vb2q,
 	/* set cropping */
 	reg_07 = i2c_smbus_read_byte_data(&dev->i2c_client, 0x07);
 	i2c_smbus_write_byte_data(&dev->i2c_client, 0x07, reg_07 & 0x0f);
-	i2c_smbus_write_byte_data(&dev->i2c_client, 0x08, 0x12);
+	i2c_smbus_write_byte_data(&dev->i2c_client, 0x08, 0x13);
 	i2c_smbus_write_byte_data(&dev->i2c_client, 0x09, 0xf4);
 	i2c_smbus_write_byte_data(&dev->i2c_client, 0x0a, 0x12);
 	i2c_smbus_write_byte_data(&dev->i2c_client, 0x0b, 0xd2);
-	i2c_smbus_write_byte_data(&dev->i2c_client, 0x0b, 0xd2);
-	/* set scaling */
-	//i2c_smbus_write_byte_data(&dev->i2c_client, 0x0d, 0x00);
-	//i2c_smbus_write_byte_data(&dev->i2c_client, 0x0f, 0x00);
-	//i2c_smbus_write_byte_data(&dev->i2c_client, 0x0e, 0x22);
-
 
 	/* start tw9910 */
 	v4l2_device_call_all(&dev->v4l2_dev, 0, video, s_stream, 1);
@@ -177,8 +165,6 @@ static int gvusb2_vb2_start_streaming(struct vb2_queue *vb2q,
 	/* stop mutex */
 	mutex_unlock(&dev->v4l2_lock);
 
-	/* set format recognition */
-	i2c_smbus_write_byte_data(&dev->i2c_client, 0x1c, 0x0f);
 	return 0;
 }
 
@@ -526,7 +512,7 @@ int gvusb2_v4l2_register(struct gvusb2_vid *dev)
 			{0x19, 0xde},
 			{0x1a, 0x0f},
 			{0x1b, 0x00},
-			{0x1c, 0x0f},
+			//{0x1c, 0x0f},
 			//{0x28, 0x0e},
 			//{0x2e, 0xa5},
 			//{0x2f, 0x06},
@@ -632,9 +618,6 @@ int gvusb2_video_register(struct gvusb2_vid *dev)
 	dev->vdev.lock = &dev->v4l2_lock;
 
 	/* set standard for device */
-	uint reg1c;
-	reg1c = i2c_smbus_read_byte_data(&dev->i2c_client, 0x1c);
-	printk("Initialization: 0x%08x\n",reg1c);
 	dev->standard = V4L2_STD_NTSC_M;
 
 	/* set standard for sub-devices */
